@@ -1,0 +1,9 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    container_name: Email-Automation-form
+    restart: always
+    ports:
+      - "8128:8100"

@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PoolBar™ Email Campaign Manager</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 32px;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .number {
+            font-size: 36px;
+            font-weight: bold;
+        }
+
+        .controls {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .control-group {
+            margin-bottom: 20px;
+        }
+
+        .control-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .batch-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .batch-option {
+            position: relative;
+        }
+
+        .batch-option input[type="radio"] {
+            display: none;
+        }
+
+        .batch-option label {
+            display: block;
+            padding: 15px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .batch-option input[type="radio"]:checked + label {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+            transform: scale(1.05);
+        }
+
+        .batch-option label:hover {
+            border-color: #667eea;
+        }
+
+        .send-button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .send-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .send-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .status-container {
+            margin-top: 30px;
+        }
+
+        .status-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .status-header h2 {
+            color: #333;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #e9ecef;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .status-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .status-table th {
+            background: #667eea;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .status-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .status-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .status-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-sent {
+            background: #28a745;
+            color: white;
+        }
+
+        .status-failed {
+            background: #dc3545;
+            color: white;
+        }
+
+        .status-already-sent {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #667eea;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .info-text {
+            color: #666;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            color: #856404;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            border-color: #bee5eb;
+            color: #0c5460;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏊 PoolBar™ Email Campaign Manager</h1>
+
+        <div id="sendingAlert" class="alert alert-info" style="display: none;">
+            ⚠️ Emails are currently being sent in the background. Please wait...
+        </div>
+
+        <div class="stats-container">
+            <div class="stat-card">
+                <h3>Total Contacts</h3>
+                <div class="number" id="totalContacts">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Already Sent</h3>
+                <div class="number" id="alreadySent">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Emails Sent</h3>
+                <div class="number" id="sentCount">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Failed</h3>
+                <div class="number" id="failedCount">0</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="control-group">
+                <label>Select Email Batch:</label>
+                <div class="batch-options">
+                    <div class="batch-option">
+                        <input type="radio" name="batch" value="1st_quarter" id="batch1">
+                        <label for="batch1">
+                            <strong>1st Quarter</strong><br>
+                            <span id="batch1Count">0</span> contacts (25%)
+                        </label>
+                    </div>
+                    <div class="batch-option">
+                        <input type="radio" name="batch" value="2nd_quarter" id="batch2">
+                        <label for="batch2">
+                            <strong>2nd Quarter</strong><br>
+                            <span id="batch2Count">0</span> contacts (25%)
+                        </label>
+                    </div>
+                    <div class="batch-option">
+                        <input type="radio" name="batch" value="3rd_quarter" id="batch3">
+                        <label for="batch3">
+                            <strong>3rd Quarter</strong><br>
+                            <span id="batch3Count">0</span> contacts (25%)
+                        </label>
+                    </div>
+                    <div class="batch-option">
+                        <input type="radio" name="batch" value="4th_quarter" id="batch4">
+                        <label for="batch4">
+                            <strong>4th Quarter</strong><br>
+                            <span id="batch4Count">0</span> contacts (25%)
+                        </label>
+                    </div>
+                </div>
+                <p class="info-text">Select a quarter to send emails to 25% of your contact list. Already sent emails will be skipped automatically.</p>
+            </div>
+
+            <button class="send-button" id="sendButton" onclick="sendEmails()">
+                Send Emails
+            </button>
+        </div>
+
+        <div class="status-container" id="statusContainer" style="display: none;">
+            <div class="status-header">
+                <h2>Email Status</h2>
+            </div>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar" style="width: 0%">0%</div>
+            </div>
+
+            <div id="statusTableContainer"></div>
+        </div>
+
+        <div id="loadingIndicator" style="display: none;">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Sending emails...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let totalContacts = 0;
+        let checkInterval = null;
+
+        // Check if emails are being sent in background
+        async function checkSendingStatus() {
+            try {
+                const response = await fetch('/api/sending-status');
+                const data = await response.json();
+                
+                if (data.is_sending) {
+                    document.getElementById('sendingAlert').style.display = 'block';
+                    document.getElementById('sendButton').disabled = true;
+                } else {
+                    document.getElementById('sendingAlert').style.display = 'none';
+                    document.getElementById('sendButton').disabled = false;
+                }
+            } catch (error) {
+                console.error('Error checking sending status:', error);
+            }
+        }
+
+        // Load contacts on page load
+        async function loadContacts() {
+            try {
+                const response = await fetch('/api/contacts');
+                const data = await response.json();
+                totalContacts = data.total;
+                
+                document.getElementById('totalContacts').textContent = totalContacts;
+                document.getElementById('alreadySent').textContent = data.sent_count;
+                
+                // Calculate batch sizes (4 equal quarters)
+                const quarter = Math.floor(totalContacts / 4);
+                const remainder = totalContacts % 4;
+                
+                document.getElementById('batch1Count').textContent = quarter;
+                document.getElementById('batch2Count').textContent = quarter;
+                document.getElementById('batch3Count').textContent = quarter;
+                document.getElementById('batch4Count').textContent = quarter + remainder; // Last quarter gets remainder
+                
+            } catch (error) {
+                console.error('Error loading contacts:', error);
+                alert('Error loading contacts. Please check if output.json exists.');
+            }
+        }
+
+        async function sendEmails() {
+            const selectedBatch = document.querySelector('input[name="batch"]:checked');
+            
+            if (!selectedBatch) {
+                alert('Please select a batch option first!');
+                return;
+            }
+
+            const sendButton = document.getElementById('sendButton');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const statusContainer = document.getElementById('statusContainer');
+            
+            sendButton.disabled = true;
+            loadingIndicator.style.display = 'block';
+            statusContainer.style.display = 'none';
+
+            try {
+                const response = await fetch('/api/send-emails', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        batch: selectedBatch.value
+                    })
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || 'Failed to send emails');
+                }
+
+                const data = await response.json();
+                
+                loadingIndicator.style.display = 'none';
+                statusContainer.style.display = 'block';
+                
+                displayResults(data.results);
+                
+                // Reload contacts to update "Already Sent" count
+                await loadContacts();
+                
+            } catch (error) {
+                console.error('Error sending emails:', error);
+                alert('Error: ' + error.message);
+                loadingIndicator.style.display = 'none';
+            } finally {
+                sendButton.disabled = false;
+            }
+        }
+
+        function displayResults(results) {
+            const sentCount = results.filter(r => r.status === 'Sent').length;
+            const failedCount = results.filter(r => r.status === 'Failed').length;
+            const alreadySentCount = results.filter(r => r.status === 'Already Sent').length;
+            const totalProcessed = results.length;
+            const successRate = totalProcessed > 0 ? Math.round((sentCount / (sentCount + failedCount)) * 100) : 0;
+            
+            document.getElementById('sentCount').textContent = sentCount;
+            document.getElementById('failedCount').textContent = failedCount;
+            
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = successRate + '%';
+            progressBar.textContent = successRate + '%';
+            
+            const tableHTML = `
+                <table class="status-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Status</th>
+                            <th>Timestamp</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${results.map((result, index) => `
+                            <tr>
+                                <td>${index + 1}</td>
+                                <td>${result.name}</td>
+                                <td>${result.email}</td>
+                                <td>
+                                    <span class="status-badge ${
+                                        result.status === 'Sent' ? 'status-sent' : 
+                                        result.status === 'Failed' ? 'status-failed' : 
+                                        'status-already-sent'
+                                    }">
+                                        ${result.status}
+                                    </span>
+                                </td>
+                                <td>${result.timestamp}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+            
+            document.getElementById('statusTableContainer').innerHTML = tableHTML;
+        }
+
+        // Load contacts when page loads
+        window.onload = function() {
+            loadContacts();
+            checkSendingStatus();
+            
+            // Check sending status every 3 seconds
+            checkInterval = setInterval(checkSendingStatus, 3000);
+        };
+        
+        // Clear interval when page unloads
+        window.onbeforeunload = function() {
+            if (checkInterval) {
+                clearInterval(checkInterval);
+            }
+        };
+    </script>
+</body>
+</html>
