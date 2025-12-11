@@ -76,7 +76,7 @@ def save_sent_email(email: str):
         json.dump({"sent_emails": sent_emails}, f, indent=2)
 
 def get_email_template(name: str) -> str:
-    """Generate HTML email template with embedded image"""
+    """Generate HTML email template with embedded images matching client design"""
     return f"""
     <!DOCTYPE html>
     <html>
@@ -92,180 +92,110 @@ def get_email_template(name: str) -> str:
             body {{
                 font-family: 'Helvetica Neue', Arial, sans-serif;
                 line-height: 1.6;
-                color: #2c3e50;
+                color: #ffffff;
                 margin: 0;
                 padding: 0;
                 background-color: #f4f7f9;
             }}
             .email-wrapper {{
                 background-color: #f4f7f9;
-                padding: 20px 0;
+                padding: 0;
             }}
             .container {{
-                max-width: 600px;
+                max-width: 700px;
                 margin: 0 auto;
-                background-color: #ffffff;
-                border-radius: 12px;
+                background-color: #2a6fa8;
                 overflow: hidden;
-                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            }}
+            .logo-section {{
+                background-color: #ffffff;
+                padding: 20px;
+                text-align: center;
+            }}
+            .logo {{
+                width: 200px;
+                height: auto;
+                display: inline-block;
+                height: 110px;
+                object-fit: cover;
             }}
             .header-image {{
                 width: 100%;
-                object-fit: cover;
-                height: 250px;
                 display: block;
-                border-bottom: 4px solid #0066cc;
+                height: 300px;
+                object-fit: cover;
             }}
             .content {{
-                padding: 40px 35px;
+                padding: 50px 40px;
+                background-color: #2a6fa8;
+                color: #ffffff;
             }}
-            .header-badge {{
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                color: white;
-                padding: 12px 25px;
-                border-radius: 25px;
-                display: inline-block;
-                font-size: 14px;
-                font-weight: 600;
-                text-transform: uppercase;
-                letter-spacing: 1px;
-                margin-bottom: 25px;
+            .name-box {{
+                background-color: rgba(255, 255, 255, 0.1);
+                border: 2px solid rgba(255, 255, 255, 0.3);
+                border-radius: 8px;
+                padding: 20px;
+                text-align: center;
+                margin-bottom: 40px;
             }}
-            .header-title {{
+            .name-box h2 {{
                 font-size: 28px;
                 font-weight: 700;
-                color: #1a1a1a;
-                margin-bottom: 30px;
-                line-height: 1.3;
-            }}
-            .greeting {{
-                font-size: 20px;
-                font-weight: 600;
-                margin-bottom: 20px;
-                color: #2c3e50;
+                color: #ffffff;
+                margin: 0;
             }}
             .paragraph {{
-                margin-bottom: 18px;
+                margin-bottom: 25px;
                 line-height: 1.8;
-                font-size: 16px;
-                color: #4a5568;
-            }}
-            .highlight-box {{
-                background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
-                border-left: 4px solid #667eea;
-                padding: 20px;
-                margin: 25px 0;
-                border-radius: 8px;
-            }}
-            .highlight-box p {{
-                margin: 0;
-                font-size: 15px;
-                color: #2c3e50;
-                font-weight: 500;
-            }}
-            .features-list {{
-                background-color: #f8fafc;
-                padding: 20px 25px;
-                border-radius: 8px;
-                margin: 25px 0;
-            }}
-            .feature-item {{
-                padding: 10px 0;
-                display: flex;
-                align-items: flex-start;
-            }}
-            .feature-item:before {{
-                content: "✓";
-                color: #10b981;
-                font-weight: bold;
-                font-size: 20px;
-                margin-right: 12px;
-                flex-shrink: 0;
+                font-size: 18px;
+                color: #ffffff;
             }}
             .button-container {{
                 text-align: center;
-                margin: 35px 0;
+                margin: 40px 0;
             }}
             .button {{
                 display: inline-block;
-                padding: 16px 40px;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                color: white !important;
+                padding: 18px 50px;
+                background-color: #f4d8a0;
+                color: #2a6fa8 !important;
                 text-decoration: none;
                 border-radius: 50px;
                 font-weight: 700;
-                font-size: 16px;
-                box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+                font-size: 18px;
                 transition: all 0.3s ease;
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
             }}
             .button:hover {{
+                background-color: #f5e5b8;
                 transform: translateY(-2px);
-                box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
             }}
-            .divider {{
-                height: 2px;
-                background: linear-gradient(90deg, transparent, #e0e7ff, transparent);
-                margin: 30px 0;
-            }}
-            .contact-box {{
-                background-color: #f8fafc;
-                padding: 20px;
-                border-radius: 8px;
+            .contact-line {{
                 text-align: center;
-                margin: 25px 0;
+                margin: 30px 0;
+                font-size: 20px;
             }}
-            .contact-box p {{
-                margin-bottom: 10px;
-                color: #4a5568;
-                font-size: 14px;
-            }}
-            .contact-box a {{
-                color: #667eea;
+            .contact-line a {{
+                color: #ffffff;
                 text-decoration: none;
                 font-weight: 600;
-                font-size: 16px;
-            }}
-            .contact-box a:hover {{
-                text-decoration: underline;
-            }}
-            .footer {{
-                background: linear-gradient(135deg, #1e3a8a 0%, #312e81 100%);
-                padding: 30px;
-                text-align: center;
-                color: white;
-            }}
-            .footer p {{
-                margin-bottom: 8px;
-                font-size: 15px;
             }}
             .signature {{
-                font-weight: 700;
-                font-size: 18px;
-                margin-top: 15px;
-                color: white;
-            }}
-            .urgency-banner {{
-                background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-                color: #78350f;
-                padding: 15px 25px;
                 text-align: center;
+                margin-top: 40px;
+                font-size: 20px;
                 font-weight: 600;
-                font-size: 14px;
-                border-radius: 8px;
-                margin: 20px 0;
+                color: #ffffff;
             }}
             @media only screen and (max-width: 600px) {{
                 .content {{
-                    padding: 25px 20px;
+                    padding: 30px 20px;
                 }}
-                .header-title {{
-                    font-size: 24px;
+                .paragraph {{
+                    font-size: 16px;
                 }}
                 .button {{
-                    padding: 14px 30px;
-                    font-size: 14px;
+                    padding: 15px 35px;
+                    font-size: 16px;
                 }}
             }}
         </style>
@@ -273,52 +203,43 @@ def get_email_template(name: str) -> str:
     <body>
         <div class="email-wrapper">
             <div class="container">
-                <img src="cid:header_image" class="header-image" alt="PoolBar IAAPA 2026">
-                
-                <div class="content">
-                    <div class="header-badge">🌊 IAAPA 2026 OPPORTUNITY</div>
-                    
-                    <h1 class="header-title">Your IAAPA PoolBar Opportunity for 2026</h1>
-                    
-                    <p class="greeting">Hi {name},</p>
-                    
-                    <p class="paragraph">Thanks again for stopping by at IAAPA and experiencing the PoolBar live. Many operators told us the same thing: <strong>this is the kind of high-impact asset they want in their lineup for 2026.</strong></p>
-                    
-                    <div class="highlight-box">
-                        <p>💡 The PoolBar inflates into a rigid, premium structure in minutes using a single high-pressure pump. It requires no blower, stays firm for up to six days, and only needs a quick top-up when you choose.</p>
-                    </div>
-                    
-                    <div class="features-list">
-                        <div class="feature-item">Inflates in minutes with a single high-pressure pump</div>
-                        <div class="feature-item">No blower required - stays firm for up to 6 days</div>
-                        <div class="feature-item">Quick deflation and compact storage</div>
-                        <div class="feature-item">Effortless turnover and transport</div>
-                    </div>
-                    
-                    <p class="paragraph">Since IAAPA, operators across various industries have already begun <strong>reserving 2026 slots and requesting ROI projections.</strong> The momentum has been strong, and early-adopter allocations are filling quickly.</p>
-                    
-                    <div class="urgency-banner">
-                        ⚡ Early-adopter allocations are filling quickly for 2026
-                    </div>
-                    
-                    <p class="paragraph">If you'd like to explore how the PoolBar can elevate your lineup in 2026 or secure early access to the IAAPA program, let's keep the conversation moving.</p>
-                    
-                    <div class="button-container">
-                        <a href="https://calendly.com/hello-oceanex/30min" class="button">📅 Schedule Your Follow-Up Meeting</a>
-                    </div>
-                    
-                    <div class="divider"></div>
-                    
-                    <div class="contact-box">
-                        <p>Questions? Reach out directly:</p>
-                        <a href="mailto:Hello@oceanex.group">Hello@oceanex.group</a>
-                    </div>
+                <!-- Logo Section -->
+                <div class="logo-section">
+                    <img src="cid:logo_image" class="logo" alt="Oceanex Logo">
                 </div>
                 
-                <div class="footer">
-                    <p>Thanks again for being part of the IAAPA experience.</p>
-                    <p>We look forward to helping you build your PoolBar revenue zone in 2026.</p>
-                    <p class="signature">🌊 Your Oceanex Crew</p>
+                <!-- Header Image -->
+                <img src="cid:header_image" class="header-image" alt="PoolBar IAAPA">
+                
+                <!-- Content Section -->
+                <div class="content">
+                    <!-- Personalized Name Box -->
+                    <div class="name-box">
+                        <h2>Hi {name},</h2>
+                    </div>
+                    
+                    <p class="paragraph">Thanks for stopping by at IAAPA and checking out the PoolBar™ Experience!</p>
+                    
+                    <p class="paragraph">We hope you enjoyed seeing how a luxury Inflatable Swim-Up Pool Bar™ can elevate any rental space with a high-value, high-engagement experience guests naturally gravitate toward.</p>
+                    
+                    <p class="paragraph">The PoolBar™, which you previewed, is fully portable, easy to set up, and built to enhance rental offerings with a premium attraction that stands out without heavy logistics or complexity.</p>
+                    
+                    <p class="paragraph">If you'd like materials for your team or want to see how PoolBar™ could fit within your rental lineup, let's keep the IAAPA momentum going.</p>
+                    
+                    <!-- CTA Button -->
+                    <div class="button-container">
+                        <a href="https://calendly.com/hello-oceanex/30min" class="button">Schedule your follow-up meeting now:</a>
+                    </div>
+                    
+                    <!-- Contact Email -->
+                    <div class="contact-line">
+                        <a href="mailto:Hello@oceanex.group">Hello@oceanex.group</a>
+                    </div>
+                    
+                    <p class="paragraph">Thanks again for being part of the action and for helping shape the next chapter of portable, immersive experiences.</p>
+                    
+                    <!-- Signature -->
+                    <p class="signature">Your PoolBar™ Crew</p>
                 </div>
             </div>
         </div>
@@ -326,12 +247,11 @@ def get_email_template(name: str) -> str:
     </html>
     """
 
-
 def send_email(to_email: str, to_name: str) -> bool:
-    """Send email to a recipient with embedded image"""
+    """Send email to a recipient with embedded images (logo + header)"""
     try:
         msg = MIMEMultipart('related')
-        msg['Subject'] = f"{to_name} quick IAAPA follow-up for your 2026 planning"
+        msg['Subject'] = f"{to_name}, quick IAAPA follow-up for your 2026 planning"
         msg['From'] = EMAIL
         msg['To'] = to_email
         
@@ -340,15 +260,25 @@ def send_email(to_email: str, to_name: str) -> bool:
         html_part = MIMEText(html_content, 'html')
         msg.attach(html_part)
         
-        # Attach image
+        # Attach logo image
         try:
-            with open('images/image.png', 'rb') as img_file:
-                img = MIMEImage(img_file.read())
-                img.add_header('Content-ID', '<header_image>')
-                img.add_header('Content-Disposition', 'inline', filename='image.png')
-                msg.attach(img)
+            with open('images/logo.jpg', 'rb') as logo_file:
+                logo_img = MIMEImage(logo_file.read())
+                logo_img.add_header('Content-ID', '<logo_image>')
+                logo_img.add_header('Content-Disposition', 'inline', filename='logo.png')
+                msg.attach(logo_img)
         except FileNotFoundError:
-            print("Warning: images/image.png not found, sending without image")
+            print("Warning: images/logo.png not found")
+        
+        # Attach header image
+        try:
+            with open('images/header.png', 'rb') as header_file:
+                header_img = MIMEImage(header_file.read())
+                header_img.add_header('Content-ID', '<header_image>')
+                header_img.add_header('Content-Disposition', 'inline', filename='header.png')
+                msg.attach(header_img)
+        except FileNotFoundError:
+            print("Warning: images/header.png not found")
         
         with smtplib.SMTP_SSL(EMAIL_HOST, EMAIL_PORT) as server:
             server.login(EMAIL, EMAIL_PASSWORD)
