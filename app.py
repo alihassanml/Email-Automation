@@ -76,97 +76,211 @@ def save_sent_email(email: str):
         json.dump({"sent_emails": sent_emails}, f, indent=2)
 
 def get_email_template(name: str) -> str:
-    """Generate HTML email template with embedded image"""
+    """Generate HTML email template with embedded images matching client design"""
     return f"""
     <!DOCTYPE html>
     <html>
     <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
+            * {{
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }}
             body {{
-                font-family: Arial, sans-serif;
+                font-family: 'Helvetica Neue', Arial, sans-serif;
                 line-height: 1.6;
-                color: #333;
+                color: #ffffff;
+                margin: 0;
+                padding: 0;
+                background-color: #f4f7f9;
+            }}
+            .email-wrapper {{
+                background-color: #f4f7f9;
+                padding: 0;
             }}
             .container {{
-                max-width: 600px;
+                max-width: 700px;
                 margin: 0 auto;
+                background-color: #2a6fa8;
+                overflow: hidden;
+            }}
+            .logo-section {{
+                background-color: #ffffff;
                 padding: 20px;
+                text-align: center;
+            }}
+            .logo {{
+                width: 200px;
+                height: 110px;
+                object-fit: cover;
+                display: inline-block;
             }}
             .header-image {{
                 width: 100%;
-                max-width: 600px;
-                height: auto;
-                margin-bottom: 20px;
+                height: 200px;
+                object-fit: cover;
+                display: block;
+                background-color: white;
+
             }}
-            .greeting {{
+            .content {{
+                padding: 50px 40px;
+                background-color: #2a6fa8;
+                color: #ffffff;
+            }}
+            .name-box {{
+                background-color: rgba(255, 255, 255, 0.1);
+                border: 2px solid rgba(255, 255, 255, 0.3);
+                border-radius: 8px;
+                padding: 20px;
+                text-align: center;
+                margin-bottom: 40px;
+            }}
+            .name-box h2 {{
+                font-size: 28px;
+                font-weight: 700;
+                color: #ffffff;
+                margin: 0;
+            }}
+            .paragraph {{
+                margin-bottom: 25px;
+                line-height: 1.8;
                 font-size: 18px;
-                font-weight: bold;
-                margin-bottom: 10px;
+                color: #ffffff;
+            }}
+            .button-container {{
+                text-align: center;
+                margin: 40px 0;
             }}
             .button {{
                 display: inline-block;
-                padding: 12px 24px;
-                background-color: #007bff;
-                color: white;
+                padding: 18px 50px;
+                background-color: #f4d8a0;
+                color: #2a6fa8 !important;
                 text-decoration: none;
-                border-radius: 5px;
-                margin: 20px 0;
+                border-radius: 50px;
+                font-weight: 700;
+                font-size: 18px;
+                transition: all 0.3s ease;
+            }}
+            .button:hover {{
+                background-color: #f5e5b8;
+                transform: translateY(-2px);
+            }}
+            .contact-line {{
+                text-align: center;
+                margin: 30px 0;
+                font-size: 20px;
+            }}
+            .contact-line a {{
+                color: #ffffff;
+                text-decoration: none;
+                font-weight: 600;
             }}
             .signature {{
-                margin-top: 30px;
-                font-style: italic;
+                text-align: center;
+                margin-top: 40px;
+                font-size: 20px;
+                font-weight: 600;
+                color: #ffffff;
+            }}
+            @media only screen and (max-width: 600px) {{
+                .content {{
+                    padding: 30px 20px;
+                }}
+                .paragraph {{
+                    font-size: 16px;
+                }}
+                .button {{
+                    padding: 15px 35px;
+                    font-size: 16px;
+                }}
             }}
         </style>
     </head>
     <body>
-        <div class="container">
-            <img src="cid:header_image" class="header-image" alt="PoolBar Header">
-            
-            <p class="greeting">Hi {name},</p>
-            
-            <p>Thanks for stopping by at IAAPA and checking out the PoolBar™ Experience!</p>
-            
-            <p>We hope you enjoyed seeing how a luxury Inflatable Swim-Up PoolBar™ can elevate any rental space with a high-value, high-engagement experience guests naturally gravitate toward.</p>
-            
-            <p>The PoolBar™, which you previewed, is fully portable, easy to set up, and built to enhance rental offerings with a premium attraction that stands out without heavy logistics or complexity.</p>
-            
-            <p>If you'd like materials for your team or want to see how PoolBar™ could fit within your rental lineup, let's keep the IAAPA momentum going.</p>
-            
-            <p><strong>Schedule your follow-up meeting now:</strong></p>
-            <a href="https://calendly.com/hello-oceanex/30min" class="button">Book a Meeting</a>
-            
-            <p>Or reach us at: <a href="mailto:Hello@oceanex.group">Hello@oceanex.group</a></p>
-            
-            <p>Thanks again for being part of the action and for helping shape the next chapter of portable, immersive experiences.</p>
-            
-            <p class="signature">Your PoolBar™ Crew</p>
+        <div class="email-wrapper">
+            <div class="container">
+                <!-- Logo Section -->
+                <div class="logo-section">
+                    <img src="cid:logo_image" class="logo" alt="Oceanex Logo">
+                </div>
+                
+                <!-- Header Image -->
+                <img src="cid:header_image" class="header-image" alt="PoolBar IAAPA">
+                
+                <!-- Content Section -->
+                <div class="content">
+                    <!-- Personalized Name Box -->
+                    <div class="name-box">
+                        <h2>Hi {name}</h2>
+                    </div>
+                    
+                    <p class="paragraph">Thanks again for stopping by at IAAPA and experiencing the PoolBar live. Many operators told us the same thing: this is the kind of high-impact asset they want in their lineup for 2026.</p>
+                    
+                    <p class="paragraph">The PoolBar, which you previewed, inflates into a rigid, premium structure in minutes using a single high-pressure pump. It requires no blower, stays firm for up to six days, and only needs a quick top-up when you choose. When the event ends, it deflates fast and packs down small, making turnover and transport effortless.</p>
+                    
+                    <p class="paragraph">Since IAAPA, operators have already begun reserving 2026 slots and requesting ROI projections. The momentum has been strong, and early-adopter allocations are filling quickly.</p>
+                    
+                    <p class="paragraph">If you'd like to explore how the PoolBar can elevate your lineup in 2026 or secure early access to the IAAPA program, let’s keep the conversation moving.</p>
+                    
+                    <!-- CTA Button -->
+                    <div class="button-container">
+                        <a href="https://calendly.com/hello-oceanex/30min" class="button">Schedule your follow-up meeting now:</a>
+                    </div>
+                    
+                    <!-- Contact Email -->
+                    <div class="contact-line">
+                        <a href="mailto:Hello@oceanex.group">Hello@oceanex.group</a>
+                    </div>
+                    
+                    <p class="paragraph">Thanks again for being part of the IAAPA experience. We look forward to helping you build your PoolBar revenue zone in 2026.</p>
+                    
+                    <!-- Signature -->
+                    <p class="signature">Your PoolBar™ Crew</p>
+                </div>
+            </div>
         </div>
     </body>
     </html>
     """
 
 def send_email(to_email: str, to_name: str) -> bool:
-    """Send email to a recipient with embedded image"""
+    """Send email to a recipient with embedded images (logo + header)"""
     try:
         msg = MIMEMultipart('related')
-        msg['Subject'] = "Follow Up: PoolBar™ Experience at IAAPA"
+        msg['Subject'] = f"{to_name}, quick IAAPA follow-up for your 2026 planning"
         msg['From'] = EMAIL
         msg['To'] = to_email
-        
+
+        to_name=to_name.split()[0]
         # Create HTML part
         html_content = get_email_template(to_name)
         html_part = MIMEText(html_content, 'html')
         msg.attach(html_part)
         
-        # Attach image
+        # Attach logo image
         try:
-            with open('images/image.jpg', 'rb') as img_file:
-                img = MIMEImage(img_file.read())
-                img.add_header('Content-ID', '<header_image>')
-                img.add_header('Content-Disposition', 'inline', filename='image.png')
-                msg.attach(img)
+            with open('images/logo.png', 'rb') as logo_file:
+                logo_img = MIMEImage(logo_file.read())
+                logo_img.add_header('Content-ID', '<logo_image>')
+                logo_img.add_header('Content-Disposition', 'inline', filename='logo.png')
+                msg.attach(logo_img)
         except FileNotFoundError:
-            print("Warning: images/image.png not found, sending without image")
+            print("Warning: images/logo.png not found")
+        
+        # Attach header image
+        try:
+            with open('images/header.png', 'rb') as header_file:
+                header_img = MIMEImage(header_file.read())
+                header_img.add_header('Content-ID', '<header_image>')
+                header_img.add_header('Content-Disposition', 'inline', filename='header.png')
+                msg.attach(header_img)
+        except FileNotFoundError:
+            print("Warning: images/header.png not found")
         
         with smtplib.SMTP_SSL(EMAIL_HOST, EMAIL_PORT) as server:
             server.login(EMAIL, EMAIL_PASSWORD)
