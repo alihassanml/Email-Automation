@@ -294,7 +294,7 @@ def send_email(to_email: str, to_name: str) -> bool:
 def load_contacts() -> List[dict]:
     """Load contacts from output.json"""
     try:
-        with open('test.json', 'r') as f:
+        with open('output.json', 'r') as f:
             return json.load(f)
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="output.json not found")
