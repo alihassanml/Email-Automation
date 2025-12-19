@@ -256,7 +256,7 @@ def send_email(to_email: str, to_name: str) -> bool:
         msg['From'] = EMAIL
         msg['To'] = to_email
 
-        to_name=to_name.split()[0]
+        to_name= str.capitalize(to_name.split()[0])
         # Create HTML part
         html_content = get_email_template(to_name)
         html_part = MIMEText(html_content, 'html')
